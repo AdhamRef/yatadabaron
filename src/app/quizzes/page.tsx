@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { BookOpen } from "lucide-react";
 
 export const metadata = { title: "جميع الاختبارات" };
-export const revalidate = 30;
+export const dynamic = "force-dynamic";
 
 export default async function QuizzesPage() {
   const quizzes = await prisma.quiz.findMany({

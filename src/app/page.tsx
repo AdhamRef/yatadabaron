@@ -9,7 +9,7 @@ import { QuizCard } from "@/components/quiz-card";
 import { HeroOrbit } from "@/components/hero-orbit";
 import { toArabicDigits } from "@/lib/utils";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const [quizzes, attemptCount, quizCount] = await Promise.all([
