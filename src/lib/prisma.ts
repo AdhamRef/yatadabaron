@@ -2,37 +2,41 @@ import path from "node:path";
 import { loadEnvConfig } from "@next/env";
 import { PrismaClient } from "@prisma/client";
 
-// Guarantee DATABASE_URL is loaded regardless of how this module is imported
-// (Next page-data collection, Prisma CLI, tsx, ad-hoc scripts). Try cwd first
-// — fast and usually right — then fall back to a path resolved from this
-// file's location, which is stable even when cwd isn't the project root.
+// Best-effort env loading — helps local dev, tsx scripts, and odd CWDs.
+// Does NOT throw if DATABASE_URL is missing: module imports must succeed
+// even during `next build`'s page-data collection on platforms like Vercel
+// where build-time env may differ from runtime env.
+if (!process.env.DATABASE_URL) loadEnvConfig(process.cwd());
 if (!process.env.DATABASE_URL) {
-  loadEnvConfig(process.cwd());
-}
-if (!process.env.DATABASE_URL) {
-  // src/lib/prisma.ts → project root is two dirs up.
   loadEnvConfig(path.resolve(__dirname, "..", ".."));
-}
-
-if (!process.env.DATABASE_URL) {
-  throw new Error(
-    "DATABASE_URL is not set. Check that a .env file exists at the project root and contains DATABASE_URL=..."
-  );
 }
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-// Pass the URL explicitly via `datasourceUrl` so Prisma doesn't need to
-// re-resolve `env("DATABASE_URL")` from the schema at construction time.
-// This sidesteps the "Environment variable not found: DATABASE_URL" error
-// in any context where the Prisma engine's env lookup runs before Node's.
-export const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
+function createClient(): PrismaClient {
+  if (!process.env.DATABASE_URL) {
+    throw new Error(
+      "DATABASE_URL is not set. Locally: add it to .env. On Vercel: Settings → Environment Variables."
+    );
+  }
+  return new PrismaClient({
     datasourceUrl: process.env.DATABASE_URL,
     log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
   });
+}
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+// Lazy singleton: PrismaClient is only instantiated on the first property
+// access, not at module load. This means `import { prisma }` succeeds during
+// `next build`'s static analysis / page-data collection even when env vars
+// aren't injected into the build step. The real query-time error (if any)
+// still surfaces loudly at runtime with a clear message.
+export const prisma: PrismaClient = new Proxy({} as PrismaClient, {
+  get(_target, prop: string | symbol) {
+    const client = globalForPrisma.prisma ?? createClient();
+    if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = client;
+    const value = Reflect.get(client, prop, client);
+    return typeof value === "function" ? value.bind(client) : value;
+  },
+});
