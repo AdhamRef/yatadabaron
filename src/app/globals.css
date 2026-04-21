@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 248 250 246;
+  --foreground: 17 63 51;
+  --card: 255 255 255;
+  --muted: 243 247 243;
+  --border: 214 230 221;
+  --ring: 47 151 112;
+}
+
+.dark {
+  --background: 8 20 18;
+  --foreground: 221 238 227;
+  --card: 13 30 26;
+  --muted: 18 37 32;
+  --border: 26 56 47;
+  --ring: 84 178 138;
+}
+
+html,
+body {
+  height: 100%;
+  background-color: rgb(var(--background));
+  color: rgb(var(--foreground));
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@layer base {
+  body {
+    font-feature-settings: "ss01", "liga", "clig";
+  }
+
+  ::selection {
+    background: rgba(47, 151, 112, 0.35);
+    color: inherit;
+  }
+
+  * {
+    border-color: rgb(var(--border));
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/60 dark:bg-white/5 backdrop-blur-xl border border-white/40 dark:border-white/10;
+  }
+
+  .bg-app {
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(47, 151, 112, 0.18), transparent 60%),
+      radial-gradient(900px 500px at 0% 0%, rgba(217, 147, 41, 0.12), transparent 60%),
+      radial-gradient(600px 400px at 50% 120%, rgba(47, 151, 112, 0.15), transparent 60%),
+      rgb(var(--background));
+  }
+
+  .dark .bg-app {
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(47, 151, 112, 0.22), transparent 60%),
+      radial-gradient(900px 500px at 0% 0%, rgba(217, 147, 41, 0.10), transparent 60%),
+      radial-gradient(600px 400px at 50% 120%, rgba(47, 151, 112, 0.18), transparent 60%),
+      rgb(var(--background));
+  }
+
+  .arabic-numerals {
+    font-feature-settings: "lnum";
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Islamic geometric background — rendered via SVG mask-image for subtlety */
+.pattern-islamic {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'><g fill='none' stroke='%232f9770' stroke-width='0.6' stroke-opacity='0.15'><path d='M30 2 L58 30 L30 58 L2 30 Z'/><path d='M30 14 L46 30 L30 46 L14 30 Z'/><circle cx='30' cy='30' r='6'/></g></svg>");
+  background-size: 60px 60px;
+}
+
+/* Shimmer loader */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(var(--muted)) 0%,
+    rgba(var(--border)) 50%,
+    rgba(var(--muted)) 100%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.6s infinite linear;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(47, 151, 112, 0.25);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(47, 151, 112, 0.5); }
+
+/* Ensure RTL keyboard focus visible */
+:focus-visible {
+  outline: 2px solid rgb(var(--ring));
+  outline-offset: 2px;
+  border-radius: 8px;
+}
