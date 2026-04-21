@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xxd .env)",
+      "Bash(npm run *)"
+    ]
+  }
+}

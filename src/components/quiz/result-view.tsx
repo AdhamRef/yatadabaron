@@ -4,7 +4,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Check, X, RotateCcw, Home, Trophy, Clock, ChevronDown, Phone } from "lucide-react";
+import { Check, X, RotateCcw, Home, Trophy, Clock, ChevronDown, Phone, UserCircle2, ArrowLeft } from "lucide-react";
 import toast from "react-hot-toast";
 import { Container } from "@/components/ui/container";
 import { Card } from "@/components/ui/card";
@@ -151,6 +151,34 @@ export function ResultView({
             ))}
           </div>
         </div>
+
+        {/* Closing CTA */}
+        <Card className="mt-10 p-8 sm:p-10 text-center relative overflow-hidden">
+          <div aria-hidden className="absolute inset-0 pattern-islamic opacity-10 dark:opacity-[0.05]" />
+          <div className="relative">
+            <h3 className="font-display text-2xl sm:text-3xl font-bold text-brand-900 dark:text-brand-50 mb-2">
+              ما الخطوة التالية؟
+            </h3>
+            <p className="text-sm text-brand-700/80 dark:text-brand-200/80 mb-7 max-w-md mx-auto leading-relaxed">
+              تابع تقدّمك وسلسلة إنجازاتك من ملفك الشخصي، أو أعد الاختبار لتحسين نتيجتك.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link href="/profile">
+                <Button size="lg" className="w-full sm:w-auto px-8">
+                  <UserCircle2 className="h-4 w-4" />
+                  الذهاب إلى ملفي
+                  <ArrowLeft className="h-4 w-4" />
+                </Button>
+              </Link>
+              <Link href={`/quizzes/${quiz.slug}/play`}>
+                <Button size="lg" variant="outline" className="w-full sm:w-auto">
+                  <RotateCcw className="h-4 w-4" />
+                  إعادة الاختبار
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </Card>
       </Container>
     </>
   );
