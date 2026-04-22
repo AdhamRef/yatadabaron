@@ -92,7 +92,7 @@ export async function submitAttempt(input: SubmitAttemptInput) {
   }
 
   revalidatePath("/");
-  revalidatePath(`/quizzes/${quiz.slug}`);
+  revalidatePath(`/quizzes/${quiz.id}`);
 
   return { ok: true as const, attemptId: attempt.id };
 }

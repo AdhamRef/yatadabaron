@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { quizSchema, type QuizInput } from "@/lib/validators";
 import { createQuiz, updateQuiz } from "@/app/actions/admin";
+import { CopyLinkButton } from "@/components/admin/copy-link-button";
 
 type EditorQuestion = {
   text: string;
@@ -136,7 +137,13 @@ export function QuizEditor({
         return;
       }
       toast.success("تم الحفظ");
-      router.push("/admin/quizzes");
+      // After create, land on the new quiz's edit page so the "Copy link"
+      // button is immediately available. After update, go back to the list.
+      if (mode === "create" && "id" in res && res.id) {
+        router.push(`/admin/quizzes/${res.id}`);
+      } else {
+        router.push("/admin/quizzes");
+      }
       router.refresh();
     } finally {
       setLoading(false);
@@ -336,7 +343,14 @@ export function QuizEditor({
             <Sparkles className="inline h-4 w-4 me-1 text-gold-500" />
             {s.questions.length} سؤال · {s.published ? "سيُنشر" : "مسودة"}
           </div>
-          <div className="flex gap-2 w-full sm:w-auto">
+          <div className="flex gap-2 w-full sm:w-auto flex-wrap justify-end">
+            {mode === "edit" && id && s.published && (
+              <CopyLinkButton
+                path={`/quizzes/${id}`}
+                label="نسخ رابط الاختبار"
+                variant="secondary"
+              />
+            )}
             <Button variant="outline" onClick={() => save(false)} loading={loading} className="flex-1 sm:flex-none">
               حفظ كمسودة
             </Button>

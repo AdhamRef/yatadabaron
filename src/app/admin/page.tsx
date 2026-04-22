@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toArabicDigits, scorePercent, gradeLabel } from "@/lib/utils";
+import { CopyLinkButton } from "@/components/admin/copy-link-button";
 
 export const dynamic = "force-dynamic";
 
@@ -17,7 +18,7 @@ export default async function AdminOverview() {
       orderBy: { finishedAt: "desc" },
       take: 8,
       include: {
-        quiz: { select: { title: true, slug: true } },
+        quiz: { select: { title: true } },
         user: { select: { name: true, email: true } },
       },
     }),
@@ -85,25 +86,35 @@ export default async function AdminOverview() {
           {topQuizzes.length === 0 ? (
             <div className="text-sm text-brand-700/70 dark:text-brand-200/70">لا توجد بيانات.</div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-2">
               {topQuizzes.map((q) => (
-                <Link
+                <div
                   key={q.id}
-                  href={`/admin/quizzes/${q.id}`}
-                  className="block p-3 rounded-xl hover:bg-brand-50 dark:hover:bg-brand-900/50 transition-colors"
+                  className="p-3 rounded-xl hover:bg-brand-50 dark:hover:bg-brand-900/50 transition-colors"
                 >
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="text-sm font-semibold text-brand-900 dark:text-brand-50 truncate">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Link
+                      href={`/admin/quizzes/${q.id}`}
+                      className="text-sm font-semibold text-brand-900 dark:text-brand-50 truncate flex-1 hover:underline"
+                    >
                       {q.coverEmoji} {q.title}
-                    </div>
+                    </Link>
                     <Badge tone="neutral">{toArabicDigits(q._count.attempts)}</Badge>
                   </div>
-                  {!q.published && (
-                    <div className="text-[11px] text-amber-600 dark:text-amber-300 font-semibold mt-1">
-                      مسودة
-                    </div>
-                  )}
-                </Link>
+                  <div className="flex items-center justify-between gap-2">
+                    {q.published ? (
+                      <CopyLinkButton
+                        path={`/quizzes/${q.id}`}
+                        label="نسخ الرابط"
+                        variant="ghost"
+                      />
+                    ) : (
+                      <span className="text-[11px] text-amber-600 dark:text-amber-300 font-semibold">
+                        مسودة
+                      </span>
+                    )}
+                  </div>
+                </div>
               ))}
             </div>
           )}

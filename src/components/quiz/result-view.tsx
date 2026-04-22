@@ -27,7 +27,7 @@ export function ResultView({
   needsPhone = false,
 }: {
   attempt: { id: string; score: number; total: number; durationSec: number; guestName: string | null };
-  quiz: { id: string; slug: string; title: string; coverEmoji: string };
+  quiz: { id: string; title: string; coverEmoji: string };
   answers: { questionId: string; selected: number; correct: boolean; question: Q }[];
   needsPhone?: boolean;
 }) {
@@ -121,7 +121,7 @@ export function ResultView({
             </div>
 
             <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-              <Link href={`/quizzes/${quiz.slug}/play`}>
+              <Link href={`/quizzes/${quiz.id}/play`}>
                 <Button size="lg" className="w-full sm:w-auto">
                   <RotateCcw className="h-4 w-4" />
                   أعد الاختبار
@@ -170,7 +170,7 @@ export function ResultView({
                   <ArrowLeft className="h-4 w-4" />
                 </Button>
               </Link>
-              <Link href={`/quizzes/${quiz.slug}/play`}>
+              <Link href={`/quizzes/${quiz.id}/play`}>
                 <Button size="lg" variant="outline" className="w-full sm:w-auto">
                   <RotateCcw className="h-4 w-4" />
                   إعادة الاختبار

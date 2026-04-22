@@ -44,14 +44,14 @@ export async function createQuiz(input: QuizInput) {
         })),
       },
     },
-    select: { id: true, slug: true },
+    select: { id: true },
   });
 
   revalidatePath("/");
   revalidatePath("/quizzes");
   revalidatePath("/admin");
   revalidatePath("/admin/quizzes");
-  return { ok: true as const, id: quiz.id, slug: quiz.slug };
+  return { ok: true as const, id: quiz.id };
 }
 
 export async function updateQuiz(id: string, input: QuizInput) {

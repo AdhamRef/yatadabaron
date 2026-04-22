@@ -17,7 +17,6 @@ export default async function ResultPage({
       quiz: {
         select: {
           id: true,
-          slug: true,
           title: true,
           coverEmoji: true,
         },

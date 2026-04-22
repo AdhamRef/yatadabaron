@@ -20,11 +20,11 @@ const DIFF: Record<string, { label: string; tone: "brand" | "amber" | "rose" }> 
 export default async function QuizDetailPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ id: string }>;
 }) {
-  const { slug } = await params;
+  const { id } = await params;
   const quiz = await prisma.quiz.findUnique({
-    where: quizIdOrSlugWhere(slug),
+    where: quizIdOrSlugWhere(id),
     include: {
       _count: { select: { questions: true, attempts: true } },
     },
@@ -84,7 +84,7 @@ export default async function QuizDetailPage({
           </div>
 
           <div className="mt-8">
-            <StartQuizButton quizRef={quiz.slug} isLoggedIn={!!session?.user} />
+            <StartQuizButton quizRef={quiz.id} isLoggedIn={!!session?.user} />
           </div>
         </div>
       </Card>

@@ -9,11 +9,11 @@ export const dynamic = "force-dynamic";
 export default async function PlayQuizPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ id: string }>;
 }) {
-  const { slug } = await params;
+  const { id } = await params;
   const quiz = await prisma.quiz.findUnique({
-    where: quizIdOrSlugWhere(slug),
+    where: quizIdOrSlugWhere(id),
     include: {
       questions: {
         orderBy: { order: "asc" },
@@ -35,7 +35,6 @@ export default async function PlayQuizPage({
     <QuizRunner
       quiz={{
         id: quiz.id,
-        slug: quiz.slug,
         title: quiz.title,
         coverEmoji: quiz.coverEmoji,
         questions: quiz.questions,

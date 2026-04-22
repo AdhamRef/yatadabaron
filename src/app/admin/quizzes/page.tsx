@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Plus, Pencil, Users, HelpCircle } from "lucide-react";
 import { toArabicDigits } from "@/lib/utils";
 import { DeleteQuizButton } from "@/components/admin/delete-quiz-button";
+import { CopyLinkButton } from "@/components/admin/copy-link-button";
 
 export const dynamic = "force-dynamic";
 
@@ -62,7 +63,10 @@ export default async function AdminQuizzesPage() {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-2 shrink-0">
+              <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
+                {q.published && (
+                  <CopyLinkButton path={`/quizzes/${q.id}`} label="نسخ الرابط" />
+                )}
                 <Link href={`/admin/quizzes/${q.id}`}>
                   <Button size="sm" variant="outline">
                     <Pencil className="h-4 w-4" />

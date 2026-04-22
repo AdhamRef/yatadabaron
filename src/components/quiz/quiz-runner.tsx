@@ -17,7 +17,6 @@ type Q = { id: string; text: string; options: string[]; order: number };
 
 type QuizPayload = {
   id: string;
-  slug: string;
   title: string;
   coverEmoji: string;
   questions: Q[];

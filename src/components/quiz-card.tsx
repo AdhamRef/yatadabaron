@@ -34,7 +34,7 @@ export function QuizCard({ quiz }: { quiz: QuizLike }) {
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.35 }}
     >
-      <Link href={`/quizzes/${quiz.slug}`} className="group block">
+      <Link href={`/quizzes/${quiz.id}`} className="group block">
         <Card className="p-6 h-full hover:shadow-soft transition-all duration-300 group-hover:-translate-y-1 relative overflow-hidden">
           <div
             aria-hidden
